@@ -1,0 +1,10 @@
+{
+  "首頁": 200,
+  "繁體中文": true,
+  "模組類型": [
+    "text/javascript; charset=utf-8"
+  ],
+  "圖形資源類型": [
+    "application/wasm"
+  ]
+}

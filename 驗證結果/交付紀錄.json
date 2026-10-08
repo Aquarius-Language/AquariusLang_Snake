@@ -1,0 +1,12 @@
+{
+  "入口": "貪吃蛇.rius",
+  "模組": [
+    "貪吃蛇.rius",
+    "中文介面.rius",
+    "遊戲規則.rius"
+  ],
+  "輸出資料夾": "C:\\OfficialProjects\\AquariusLang_Snake\\web",
+  "編譯器提交": "99d25fa",
+  "規則驗證": 236,
+  "網頁驗證": 16
+}
