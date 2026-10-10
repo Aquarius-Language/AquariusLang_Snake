@@ -1,1 +1,1 @@
-C:\OfficialProjects\AquariusLangTW\dist\releases\AquariusCompiler-win-x64-20261008-203849-ad895d0f\aqua\aqua.exe
+C:\OfficialProjects\AquariusLangTW\AquariusCli\bin\Release\net8.0\aqua.exe

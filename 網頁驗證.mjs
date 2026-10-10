@@ -62,7 +62,7 @@ try {
         const 主機 = window.aquarius.host;
         const 環境 = 主機.processing.events.get('keyPressed').env;
         window.驗證時刻 += 200;
-        await 主機.vm.invoke(環境.get('更新遊戲'));
+        await 主機.runtime.invoke(環境.get('更新遊戲'));
     });
     await 頁面.goto(網址); await 等待畫面(); await 安裝測試時鐘();
     驗證.equal((await 讀狀態()).狀態, '準備');
@@ -107,7 +107,7 @@ try {
         const 原局 = 環境.get('局面'), 蛇身 = 原局.get('string:蛇身')[1], 頭 = 蛇身[0];
         const 果實 = [{type:'int',value:頭[0].value+1}, 頭[1]];
         const 規則 = 環境.get('規則').scope;
-        const 新局 = await 主機.vm.invoke(規則.get('建立狀態'), [原局, 蛇身, {type:'int',value:1}, [], 果實, {type:'int',value:0}, '進行', '', {type:'int',value:99}]);
+        const 新局 = await 主機.runtime.invoke(規則.get('建立狀態'), [原局, 蛇身, {type:'int',value:1}, [], 果實, {type:'int',value:0}, '進行', '', {type:'int',value:99}]);
         環境.set('局面', 新局);
         環境.set('前次時間', {type:'double',value:window.驗證時刻});
         環境.set('累積時間', {type:'int',value:0});
@@ -127,7 +127,7 @@ try {
     驗證.equal((await 讀狀態()).狀態, '暫停'); 通過('暫停時調整視窗尺寸');
     await 頁面.setViewportSize({width:1240,height:860});
     await 點擊(850,526); await 等狀態('進行');
-    await 頁面.evaluate(async () => { window.驗證時刻 += 2000; await window.aquarius.host.vm.invoke(window.aquarius.host.processing.events.get('keyPressed').env.get('更新遊戲')); });
+    await 頁面.evaluate(async () => { window.驗證時刻 += 2000; await window.aquarius.host.runtime.invoke(window.aquarius.host.processing.events.get('keyPressed').env.get('更新遊戲')); });
     await 等狀態('暫停'); 通過('分頁停頓時自動暫停');
     驗證.deepEqual(錯誤, []); 驗證.equal(await 頁面.locator('#error').isHidden(), true); 通過('無瀏覽器錯誤');
     await 頁面.evaluate(() => window.aquarius.stop());
