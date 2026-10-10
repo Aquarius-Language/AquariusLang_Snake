@@ -1,1 +1,1 @@
-C:\OfficialProjects\AquariusLangTW\AquariusCli\bin\Release\net8.0\aqua.exe
+aqua

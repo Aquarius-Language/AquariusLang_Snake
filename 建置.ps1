@@ -1,20 +1,10 @@
-param(
-    [string]$編譯器 = '',
-    [string]$參考專案 = 'C:\OfficialProjects\AquariusLangTW',
+﻿param(
+    [string]$編譯器 = 'aqua',
     [switch]$略過驗證,
     [switch]$桌面
 )
 $ErrorActionPreference = 'Stop'
 
-if (-not $編譯器) {
-    $開發編譯器 = Join-Path $參考專案 'dist/aqua/aqua.exe'
-    if (Test-Path -LiteralPath $開發編譯器) { $編譯器 = $開發編譯器 }
-    else {
-        $最新套件 = Get-ChildItem -LiteralPath (Join-Path $參考專案 'dist/releases') -Directory -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-        if ($最新套件) { $編譯器 = Join-Path $最新套件.FullName 'aqua/aqua.exe' }
-    }
-}
-if (-not $編譯器 -or -not (Test-Path -LiteralPath $編譯器)) { throw '找不到星泉編譯器，請用 -編譯器 指定新版 aqua.exe。' }
 function 執行編譯器([string[]]$參數) {
     $輸出 = & $編譯器 @參數 2>&1
     $結束碼 = $LASTEXITCODE
@@ -22,8 +12,13 @@ function 執行編譯器([string[]]$參數) {
     if ($結束碼 -ne 0 -or ($輸出 -join "`n") -match '(?m)^ERROR:') { throw '編譯器驗證或建置失敗。' }
     return ($輸出 -join "`n")
 }
+$原主控台輸出編碼 = [Console]::OutputEncoding
+$原輸出編碼 = $OutputEncoding
 Push-Location $PSScriptRoot
 try {
+    # aqua 使用 UTF-8 輸出；Windows PowerShell 需要明確指定解碼方式。
+    [Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
+    $OutputEncoding = [Console]::OutputEncoding
     Write-Host "使用編譯器：$編譯器"
     New-Item -ItemType Directory -Path '驗證結果' -Force | Out-Null
     if (-not $略過驗證) {
@@ -54,4 +49,8 @@ try {
         執行編譯器 @('build','貪吃蛇.wasm','--target','windows','-o','dist/貪吃蛇.exe') | Out-Null
     }
     Write-Host '完成：貪吃蛇.wasm 與 ./web。'
-} finally { Pop-Location }
+} finally {
+    [Console]::OutputEncoding = $原主控台輸出編碼
+    $OutputEncoding = $原輸出編碼
+    Pop-Location
+}
